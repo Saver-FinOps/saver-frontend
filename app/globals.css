@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/* =============================================================
+   Signal Design System
+   ============================================================= */
+
+/* =============================================================
+   Design tokens (CSS custom properties)
+   ============================================================= */
+
+:root {
+  /* Font families — values injected by next/font via CSS variables --font-display and --font-body */
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Semantic foreground */
+  --color-fg: #0f172a;
+  --color-fg-secondary: #475569;
+  --color-fg-muted: #94a3b8;
+
+  /* Shadows */
+  --shadow-card: 0 4px 8px -2px rgb(16 24 40 / 0.06), 0 1px 3px rgb(16 24 40 / 0.04);
+  --shadow-glow-primary: 0 10px 24px -6px rgb(59 130 246 / 0.45);
+  --shadow-modal: 0 40px 80px -16px rgb(0 0 0 / 0.5);
+
+  /* Easing */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Gradients */
+  --grad-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --grad-primary-hov: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  --grad-savings: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --grad-hero-bg: radial-gradient(ellipse at top left, #eff6ff 0%, #ffffff 60%);
+
+  /* Tweak-overridable primary color */
+  --tw-primary-a: #3b82f6;
+  --tw-primary-b: #2563eb;
+}
+
+/* =============================================================
+   Base element styles
+   ============================================================= */
+
+html, body {
+  font-family: var(--font-body), system-ui, sans-serif;
+  color: var(--color-fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* =============================================================
+   Custom utility classes (bridge for @theme tokens)
+   ============================================================= */
+
+/* Font families — --font-display and --font-body set by next/font */
+.font-display { font-family: var(--font-display), system-ui, sans-serif; }
+.font-body    { font-family: var(--font-body), system-ui, sans-serif; }
+.font-mono    { font-family: var(--font-mono); }
+
+/* Semantic text colors */
+.text-fg           { color: var(--color-fg); }
+.text-fg-secondary { color: var(--color-fg-secondary); }
+.text-fg-muted     { color: var(--color-fg-muted); }
+
+/* Semantic backgrounds */
+.bg-surface { background-color: #f8fafc; }
+.bg-sunken  { background-color: #f1f5f9; }
+
+/* Custom shadows */
+.shadow-card         { box-shadow: var(--shadow-card); }
+.shadow-glow-primary { box-shadow: var(--shadow-glow-primary); }
+.shadow-modal        { box-shadow: var(--shadow-modal); }
+
+/* Custom radii */
+.rounded-card { border-radius: 16px; }
+
+/* Easing */
+.ease-out-expo { transition-timing-function: var(--ease-out-expo); }
+
+/* Duration */
+.duration-250 { transition-duration: 250ms; }
+
+/* Animations */
+.animate-pulse-urgent { animation: pulseUrgent 2s ease-in-out infinite; }
+.animate-float        { animation: floatSlow 9s ease-in-out infinite; }
+
+/* =============================================================
+   Semantic utility classes
+   ============================================================= */
+
+.eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #2563eb;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-fg);
+  letter-spacing: -0.025em;
+  font-size: clamp(34px, 3.8vw, 44px);
+  line-height: 1.08;
+}
+
+.grad-text {
+  background: linear-gradient(135deg, var(--tw-primary-a, #3b82f6) 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.grad-text-dark {
+  background: linear-gradient(135deg, #f87171 0%, #fbbf24 50%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.grad-text-highlight {
+  background: linear-gradient(135deg, #60a5fa, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* =============================================================
+   Keyframe animations
+   ============================================================= */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseUrgent {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+
+@keyframes floatSlow {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -14px; }
+}
+
+@keyframes growWidth {
+  from { max-width: 0; overflow: hidden; }
+}
+
+@keyframes slideInLog {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 600ms var(--ease-out-expo) both;
+}
