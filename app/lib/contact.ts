@@ -1,10 +1,12 @@
-// TODO: replace with real production domain before launch.
-const DOMAIN = 'tu-dominio-real.com';
+// Pre-launch: all channels route to founder Gmail. When a real domain
+// is verified in Resend, swap to per-channel addresses on that domain
+// (e.g. hello@signal.dev) and update CONTACT_EMAILS below.
+const FOUNDER_EMAIL = 'dujautivan@gmail.com';
 
 export const CONTACT_EMAILS = {
-  hello: `hello@${DOMAIN}`,
-  support: `support@${DOMAIN}`,
-  sales: `sales@${DOMAIN}`,
-  privacy: `privacy@${DOMAIN}`,
-  security: `security@${DOMAIN}`,
+  hello: FOUNDER_EMAIL,
+  support: FOUNDER_EMAIL,
+  sales: FOUNDER_EMAIL,
+  privacy: FOUNDER_EMAIL,
+  security: FOUNDER_EMAIL,
 } as const;
