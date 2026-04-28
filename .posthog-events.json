@@ -1,0 +1,12 @@
+[
+  {
+    "event": "faq_item_open",
+    "description": "User opens a FAQ accordion item. Tracks which questions are most engaging as a proxy for objections and user concerns.",
+    "file": "app/[lang]/(landing)/components/FAQ.tsx"
+  },
+  {
+    "event": "contact_email_click",
+    "description": "User clicks a contact email link on the contact page. Indicates intent to reach out and which channel they chose (support, sales, security, privacy, hello).",
+    "file": "app/[lang]/contact/page.tsx"
+  }
+]
