@@ -40,13 +40,14 @@ const es = {
     'Ops / Finanzas',
     'Otro',
   ],
-  form_submit: 'Escanear mi AWS gratis',
+  form_submit: 'Unirme al waitlist',
   form_submit_loading: 'Guardando tu lugar…',
   form_trust: [
     'Sin tarjeta',
     'IAM solo lectura',
     'Revocás cuando quieras',
   ],
+  form_or_scan: '¿Querés un escaneo ya? →',
   form_success_title: 'Estás dentro.',
   form_success_body:
     'Te mandamos confirmación a {email}. Cuando se libere tu cupo te llega el link al escaneo — normalmente 1 a 3 semanas. Revisá tu inbox (y Promociones por las dudas).',
@@ -56,6 +57,38 @@ const es = {
   form_secondary: 'Ver cómo es un escaneo →',
   form_error_invalid: 'Email, empresa y rol — fijate que los tres estén bien.',
   form_error_server: 'No pasó del lado nuestro. Probá de nuevo en un momento.',
+
+  // Scan request page (Concierge MVP — Iván corre los scans manualmente)
+  scan_eyebrow: 'Escaneo gratis',
+  scan_h1: 'Quiero ver mi desperdicio AWS en dólares.',
+  scan_sub:
+    'IAM solo lectura. Resultados por email en 24-48h. Gratis para las primeras 100 cuentas. Sin tarjeta, sin llamadas de venta.',
+  scan_form_email: 'Email de trabajo',
+  scan_form_company: 'Empresa',
+  scan_form_role: 'Tu rol',
+  scan_form_role_placeholder: 'Elegí tu rol',
+  scan_form_spend: 'Gasto mensual en AWS',
+  scan_form_spend_placeholder: 'Elegí un rango',
+  scan_form_spend_options: [
+    'Menos de $1k / mes',
+    '$1k–5k / mes',
+    '$5k–15k / mes',
+    '$15k–50k / mes',
+    'Más de $50k / mes',
+  ],
+  scan_form_notes: '¿Algo más? (opcional)',
+  scan_form_notes_placeholder:
+    'Stack, regiones, qué te preocupa más de tu factura — lo que nos ayude a priorizar.',
+  scan_form_submit: 'Pedir mi escaneo →',
+  scan_form_submit_loading: 'Enviando…',
+  scan_form_trust: ['Solo lectura IAM', 'Setup en 5 min', 'Hallazgos en castellano'],
+  scan_success_title: 'Recibido. Escaneo en cola.',
+  scan_success_body:
+    'Te mandamos confirmación a {email}. En 24-48h te llega un email con el template CloudFormation de 12 líneas para darnos acceso solo lectura. Cuando respondas con el ARN del rol, corremos el escaneo y te mandamos los hallazgos.',
+  scan_dup_title: 'Ya pediste un escaneo.',
+  scan_dup_body:
+    'Tenemos {email} en la lista. Revisá tu inbox (y Promociones) por nuestro email de setup. Si no llegó, escribinos y lo reenviamos.',
+  scan_back_to_landing: 'Volver al inicio',
 
   // Logos strip
   proof_eyebrow: 'Hecho para founders como',

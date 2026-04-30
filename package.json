@@ -6,9 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "scan": "tsx scripts/scan/run.ts",
+    "scan:preview": "tsx scripts/scan/preview-report.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudwatch": "^3.1039.0",
+    "@aws-sdk/client-cloudwatch-logs": "^3.1039.0",
+    "@aws-sdk/client-ec2": "^3.1039.0",
+    "@aws-sdk/client-rds": "^3.1039.0",
+    "@aws-sdk/client-sts": "^3.1038.0",
     "lucide-react": "^1.8.0",
     "next": "16.2.4",
     "posthog-js": "^1.372.3",
@@ -25,6 +32,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
