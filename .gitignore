@@ -54,3 +54,9 @@ next-env.d.ts
 
 # posthog wizard report (one-shot)
 /posthog-setup-report.md
+
+# scan reports (per-customer, contain account IDs — never commit)
+/reports/
+/preview.html
+*.scan.html
+*.scan.json

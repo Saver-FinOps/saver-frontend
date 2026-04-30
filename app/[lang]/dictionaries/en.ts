@@ -40,9 +40,10 @@ const en = {
     'Ops / Finance',
     'Other',
   ],
-  form_submit: 'Scan my AWS for free',
+  form_submit: 'Join the waitlist',
   form_submit_loading: 'Saving your spot…',
   form_trust: ['No credit card', 'Read-only IAM', 'Revoke anytime'],
+  form_or_scan: 'Want a scan now? →',
   form_success_title: 'You’re in.',
   form_success_body:
     'We sent a confirmation to {email}. When your spot opens you’ll get the scan link — usually 1-3 weeks. Check your inbox (and Promotions, just in case).',
@@ -52,6 +53,38 @@ const en = {
   form_secondary: 'See what a scan looks like →',
   form_error_invalid: 'Email, company and role — make sure all three look right.',
   form_error_server: 'That didn’t go through on our end. Give it another shot in a moment.',
+
+  // Scan request page (Concierge MVP — Iván runs scans manually)
+  scan_eyebrow: 'Free scan',
+  scan_h1: 'Get my AWS waste in dollars.',
+  scan_sub:
+    'Read-only IAM. Findings emailed in 24-48h. Free for the first 100 accounts. No credit card, no follow-up calls.',
+  scan_form_email: 'Work email',
+  scan_form_company: 'Company',
+  scan_form_role: 'Your role',
+  scan_form_role_placeholder: 'Select role',
+  scan_form_spend: 'Monthly AWS spend',
+  scan_form_spend_placeholder: 'Pick a range',
+  scan_form_spend_options: [
+    'Under $1k / month',
+    '$1k–5k / month',
+    '$5k–15k / month',
+    '$15k–50k / month',
+    'Over $50k / month',
+  ],
+  scan_form_notes: 'Anything else? (optional)',
+  scan_form_notes_placeholder:
+    'Stack, regions, what worries you most about your bill — whatever helps us prioritize.',
+  scan_form_submit: 'Get my scan →',
+  scan_form_submit_loading: 'Sending…',
+  scan_form_trust: ['Read-only IAM only', '5-min setup', 'Plain-English findings'],
+  scan_success_title: 'Got it. Scan queued.',
+  scan_success_body:
+    'We sent a confirmation to {email}. Within 24-48h you’ll get an email with the 12-line CloudFormation template to set up read-only access. Once you reply with the role ARN, we run the scan and email back the findings.',
+  scan_dup_title: 'You already requested a scan.',
+  scan_dup_body:
+    'We have {email} on file. Check your inbox (and Promotions) for our setup email — if you didn’t get it, reply to this page and we’ll resend.',
+  scan_back_to_landing: 'Back to home',
 
   // Logos strip
   proof_eyebrow: 'Built for founders like',

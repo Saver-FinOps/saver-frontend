@@ -17,6 +17,19 @@ interface FounderAlertArgs {
   userAgent?: string;
 }
 
+interface ScanRequestArgs {
+  lang: Lang;
+  email: string;
+  company: string;
+  role: string;
+  spend: string;
+  notes?: string;
+}
+
+interface ScanFounderAlertArgs extends ScanRequestArgs {
+  userAgent?: string;
+}
+
 const wrap = (inner: string) => `<!DOCTYPE html>
 <html>
   <body style="margin:0;padding:0;background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#0f172a;">
@@ -105,6 +118,97 @@ export function founderAlertEmail({
   `);
 
   const text = `New waitlist signup\n\nEmail: ${email}\nCompany: ${company}\nRole: ${role}\nLang: ${lang}${userAgent ? `\nUA: ${userAgent}` : ''}`;
+
+  return { subject, html, text };
+}
+
+export function scanRequestUserEmail({
+  lang,
+  email,
+  company,
+  role,
+  spend,
+}: ScanRequestArgs) {
+  const isEs = lang === 'es';
+
+  const subject = isEs
+    ? 'Recibimos tu pedido de escaneo · Signal'
+    : 'We got your scan request · Signal';
+
+  const heading = isEs ? 'Escaneo en cola.' : 'Scan queued.';
+
+  const body = isEs
+    ? `<p style="font-size:16px;line-height:1.55;margin:0 0 16px;color:#334155;">Soy Iván, hice Signal. Recibí tu pedido — esto es lo que registramos:</p>
+       <ul style="font-size:15px;line-height:1.6;color:#334155;margin:0 0 24px;padding-left:20px;">
+         <li><strong>${email}</strong></li>
+         <li>${company} · ${role}</li>
+         <li>Gasto AWS: ${spend}</li>
+       </ul>
+       <p style="font-size:15px;line-height:1.6;color:#334155;margin:0 0 16px;"><strong>Qué pasa ahora:</strong> en las próximas 24-48 horas te mando un email con un template CloudFormation de 12 líneas para que armes el rol IAM solo lectura. Una vez que me pasás el ARN del rol, corro el escaneo y te mando los hallazgos en otro mail.</p>
+       <p style="font-size:15px;line-height:1.6;color:#334155;margin:0 0 16px;"><strong>Mientras tanto:</strong> si querés acelerar, podés ir a tu AWS Console → IAM → Roles → Create role → AWS account → Another AWS account → ahí esperá mi mail con el ID de cuenta de Signal y la policy.</p>
+       <p style="font-size:15px;line-height:1.6;color:#334155;margin:0;">¿Dudas? Respondé este mail. Lo leo yo, no un sistema.</p>
+       <p style="font-size:15px;line-height:1.55;color:#334155;margin:24px 0 0;">— Iván<br/><span style="color:#94a3b8;font-size:13px;">Signal · Buenos Aires</span></p>`
+    : `<p style="font-size:16px;line-height:1.55;margin:0 0 16px;color:#334155;">I'm Iván, I built Signal. Got your request — here's what we have on file:</p>
+       <ul style="font-size:15px;line-height:1.6;color:#334155;margin:0 0 24px;padding-left:20px;">
+         <li><strong>${email}</strong></li>
+         <li>${company} · ${role}</li>
+         <li>AWS spend: ${spend}</li>
+       </ul>
+       <p style="font-size:15px;line-height:1.6;color:#334155;margin:0 0 16px;"><strong>What happens next:</strong> within 24-48 hours I'll email you a 12-line CloudFormation template to set up a read-only IAM role. Once you reply with the role ARN, I run the scan and email back the findings.</p>
+       <p style="font-size:15px;line-height:1.6;color:#334155;margin:0 0 16px;"><strong>Want to move faster:</strong> head to AWS Console → IAM → Roles → Create role → AWS account → Another AWS account → wait for my email with Signal's account ID and the policy.</p>
+       <p style="font-size:15px;line-height:1.6;color:#334155;margin:0;">Questions? Reply to this email. A human reads it (me).</p>
+       <p style="font-size:15px;line-height:1.55;color:#334155;margin:24px 0 0;">— Iván<br/><span style="color:#94a3b8;font-size:13px;">Signal · Buenos Aires</span></p>`;
+
+  const html = wrap(`
+    <tr>
+      <td>
+        <div style="font-size:28px;font-weight:800;background:linear-gradient(45deg,#3b82f6,#10b981);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 8px;">Signal</div>
+        <h1 style="font-size:24px;font-weight:700;color:#0f172a;margin:0 0 24px;">${heading}</h1>
+        ${body}
+      </td>
+    </tr>
+  `);
+
+  const text = isEs
+    ? `${heading}\n\nSoy Iván, hice Signal. Recibí tu pedido:\n\n- ${email}\n- ${company} · ${role}\n- Gasto AWS: ${spend}\n\nQué pasa ahora: en 24-48 horas te mando un email con un template CloudFormation para el rol IAM solo lectura. Cuando me pasás el ARN, corro el escaneo y te mando los hallazgos.\n\n¿Dudas? Respondé este mail. Lo leo yo.\n\n— Iván\nSignal · Buenos Aires`
+    : `${heading}\n\nI'm Iván, I built Signal. Got your request:\n\n- ${email}\n- ${company} · ${role}\n- AWS spend: ${spend}\n\nWhat happens next: within 24-48 hours I'll email you a CloudFormation template for the read-only IAM role. Once you reply with the ARN, I run the scan and email findings.\n\nQuestions? Reply to this email. A human reads it (me).\n\n— Iván\nSignal · Buenos Aires`;
+
+  return { subject, html, text };
+}
+
+export function scanRequestFounderAlert({
+  lang,
+  email,
+  company,
+  role,
+  spend,
+  notes,
+  userAgent,
+}: ScanFounderAlertArgs) {
+  const subject = `[Signal] 🔥 SCAN REQUEST: ${email} · ${spend}`;
+
+  const html = wrap(`
+    <tr>
+      <td>
+        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px 18px;margin:0 0 20px;">
+          <div style="font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">High-intent lead · Action required</div>
+          <div style="font-size:14px;color:#7f1d1d;line-height:1.5;">Send this lead the IAM setup template within 24-48h.</div>
+        </div>
+        <h1 style="font-size:20px;font-weight:700;color:#0f172a;margin:0 0 16px;">New scan request</h1>
+        <table cellpadding="0" cellspacing="0" border="0" style="font-size:14px;line-height:1.6;color:#334155;width:100%;">
+          <tr><td style="padding:4px 16px 4px 0;color:#64748b;width:120px;">Email</td><td><strong>${email}</strong></td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#64748b;">Company</td><td>${company}</td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#64748b;">Role</td><td>${role}</td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#64748b;">AWS spend</td><td><strong style="color:#0f172a;">${spend}</strong></td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#64748b;">Lang</td><td>${lang}</td></tr>
+          ${notes ? `<tr><td style="padding:8px 16px 4px 0;color:#64748b;vertical-align:top;">Notes</td><td style="white-space:pre-wrap;">${notes.replace(/</g, '&lt;')}</td></tr>` : ''}
+          ${userAgent ? `<tr><td style="padding:8px 16px 4px 0;color:#64748b;vertical-align:top;">UA</td><td style="font-family:ui-monospace,monospace;font-size:12px;color:#94a3b8;">${userAgent}</td></tr>` : ''}
+        </table>
+      </td>
+    </tr>
+  `);
+
+  const text = `🔥 SCAN REQUEST · Action required\n\nSend this lead the IAM setup template within 24-48h.\n\nEmail: ${email}\nCompany: ${company}\nRole: ${role}\nAWS spend: ${spend}\nLang: ${lang}${notes ? `\n\nNotes:\n${notes}` : ''}${userAgent ? `\n\nUA: ${userAgent}` : ''}`;
 
   return { subject, html, text };
 }

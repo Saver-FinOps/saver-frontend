@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >-
+  Signal — read-only IAM role for cost waste scanning.
+  Creates an IAM role that Signal's AWS account can assume (gated by an
+  External ID) to read resource metadata and Cost Explorer data. Zero write
+  permissions. Revoke anytime by deleting the stack.
+
+Parameters:
+  SignalAccountId:
+    Type: String
+    Description: >-
+      The AWS account ID that Signal uses to assume this role.
+      Provided in the email from Signal — 12-digit number.
+    AllowedPattern: '^\d{12}$'
+    ConstraintDescription: 'Must be a 12-digit AWS account ID.'
+
+  ExternalId:
+    Type: String
+    Description: >-
+      Random unique identifier provided in the email from Signal.
+      Prevents the "confused deputy" attack (AWS security best practice).
+    MinLength: 16
+    MaxLength: 128
+    NoEcho: false
+
+Resources:
+  SignalReadOnlyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: SignalReadOnlyRole
+      Description: 'Read-only role assumed by Signal for cost waste scans.'
+      MaxSessionDuration: 3600
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${SignalAccountId}:root'
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                sts:ExternalId: !Ref ExternalId
+      Policies:
+        - PolicyName: SignalReadOnlyAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ce:Get*
+                  - cloudwatch:Get*
+                  - cloudwatch:List*
+                  - ec2:Describe*
+                  - rds:Describe*
+                  - elasticloadbalancing:Describe*
+                  - logs:Describe*
+                  - s3:ListAllMyBuckets
+                  - s3:GetBucketLocation
+                Resource: '*'
+      Tags:
+        - Key: signal:managed
+          Value: 'true'
+        - Key: signal:purpose
+          Value: 'readonly-scan'
+
+Outputs:
+  RoleArn:
+    Description: >-
+      Send THIS value back to Signal so we can run the scan.
+      Reply to our email with this ARN.
+    Value: !GetAtt SignalReadOnlyRole.Arn
+    Export:
+      Name: SignalReadOnlyRoleArn

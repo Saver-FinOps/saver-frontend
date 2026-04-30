@@ -347,16 +347,27 @@ function HeroForm({ lang, t, onOpenSample, big }: { lang: string; t: T; onOpenSa
         ))}
       </div>
 
-      <button
-        type="button"
-        onClick={() => {
-          track("sample_open", { source: "hero_form" });
-          onOpenSample?.();
-        }}
-        className="bg-transparent border-none text-(--tw-primary-b,#2563eb) text-sm font-semibold cursor-pointer self-start mt-1 p-0 font-body"
-      >
-        {t.form_secondary}
-      </button>
+      <div className="flex flex-col gap-2 mt-1">
+        <button
+          type="button"
+          onClick={() => {
+            track("sample_open", { source: "hero_form" });
+            onOpenSample?.();
+          }}
+          className="bg-transparent border-none text-(--tw-primary-b,#2563eb) text-sm font-semibold cursor-pointer self-start p-0 font-body"
+        >
+          {t.form_secondary}
+        </button>
+        <a
+          href={`/${lang}/scan`}
+          onClick={() =>
+            track("cta_click", { source: "hero_form", cta: "scan_now" })
+          }
+          className="text-sm font-semibold cursor-pointer self-start p-0 font-body no-underline text-emerald-700 hover:text-emerald-800"
+        >
+          {t.form_or_scan}
+        </a>
+      </div>
     </form>
   );
 }
