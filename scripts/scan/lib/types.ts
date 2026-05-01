@@ -46,6 +46,25 @@ export interface ScanReport {
   findingsByCategory: Record<FindingCategory, number>;
   findings: Finding[];
   errors: ScanError[];
+  /**
+   * Optional — populated when Cost Explorer is enabled and the IAM role
+   * has `ce:GetCostAndUsage`. When absent, the report falls back to the
+   * estimate-only view (no "% of bill" callout).
+   */
+  accountSpend?: AccountSpend;
+}
+
+export interface AccountSpend {
+  /** ISO date YYYY-MM-DD */
+  periodStart: string;
+  /** ISO date YYYY-MM-DD */
+  periodEnd: string;
+  /** Total UnblendedCost over the period (~30 days). */
+  total: number;
+  /** Per-service breakdown, sorted by cost desc by convention. */
+  byService: Record<string, number>;
+  /** Computed: estimated savings as % of total. 0 if total is 0. */
+  wastePctOfBill: number;
 }
 
 export interface ScanError {

@@ -7,6 +7,7 @@ import { EC2Client } from '@aws-sdk/client-ec2';
 import { RDSClient } from '@aws-sdk/client-rds';
 import { CloudWatchClient } from '@aws-sdk/client-cloudwatch';
 import { CloudWatchLogsClient } from '@aws-sdk/client-cloudwatch-logs';
+import { CostExplorerClient } from '@aws-sdk/client-cost-explorer';
 
 export interface AssumedCredentials {
   accessKeyId: string;
@@ -103,4 +104,17 @@ export function cloudwatchLogsClientFor(
   region: string,
 ): CloudWatchLogsClient {
   return new CloudWatchLogsClient({ region, credentials: credsFor(creds) });
+}
+
+/**
+ * Cost Explorer is a global service — only callable via us-east-1.
+ * No region argument: we hardcode it.
+ */
+export function costExplorerClientFor(
+  creds: AssumedCredentials,
+): CostExplorerClient {
+  return new CostExplorerClient({
+    region: 'us-east-1',
+    credentials: credsFor(creds),
+  });
 }

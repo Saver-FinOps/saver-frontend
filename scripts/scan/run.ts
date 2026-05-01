@@ -13,14 +13,21 @@
  */
 
 import { writeFileSync } from 'node:fs';
-import { assumeCustomerRole } from './lib/aws';
+import { assumeCustomerRole, costExplorerClientFor } from './lib/aws';
 import { scanIdleEbs } from './lib/scanners/idle-ebs';
 import { scanUnusedEips } from './lib/scanners/unused-eips';
 import { scanLogRetention } from './lib/scanners/log-retention';
 import { scanIdleNatGateways } from './lib/scanners/nat-idle';
 import { scanOversizedRds } from './lib/scanners/rds-oversized';
+import { getMonthlySpendOverview } from './lib/cost-explorer';
 import { renderReportHtml } from './lib/report/html';
-import type { Finding, ScanError, ScanReport, FindingCategory } from './lib/types';
+import type {
+  AccountSpend,
+  Finding,
+  ScanError,
+  ScanReport,
+  FindingCategory,
+} from './lib/types';
 
 const DEFAULT_REGIONS = ['us-east-1', 'us-west-2'];
 
@@ -101,6 +108,25 @@ async function main() {
   const allFindings: Finding[] = [];
   const allErrors: ScanError[] = [];
 
+  // Cost Explorer overview — 1 call ($0.01) gives us context for the report.
+  // This is OPTIONAL: failures don't trigger the partial-scan banner because
+  // findings are still complete without spend data. We just lose the
+  // "% of bill" callout.
+  console.log('\n💵 Fetching spend overview…');
+  let accountSpend: AccountSpend | undefined;
+  try {
+    const ce = costExplorerClientFor(creds);
+    const spend = await getMonthlySpendOverview(ce);
+    accountSpend = { ...spend, wastePctOfBill: 0 };
+    console.log(
+      `   ✓ Last 30 days: $${spend.total.toLocaleString('en-US')} across ${Object.keys(spend.byService).length} services`,
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.log(`   ✗ Cost Explorer unavailable: ${message.split('\n')[0]}`);
+    // Intentionally NOT pushed to allErrors — keep this off the customer report.
+  }
+
   for (const region of args.regions) {
     console.log(`\n🔎 Scanning ${region}…`);
 
@@ -150,6 +176,12 @@ async function main() {
       allFindings.reduce((sum, f) => sum + f.estimatedMonthlyCost, 0) * 100,
     ) / 100;
 
+  if (accountSpend && accountSpend.total > 0) {
+    accountSpend.wastePctOfBill = Math.round(
+      (totalEstimatedMonthlySavings / accountSpend.total) * 100,
+    );
+  }
+
   const report: ScanReport = {
     scannedAt: new Date().toISOString(),
     accountId: creds.accountId,
@@ -158,6 +190,7 @@ async function main() {
     findingsByCategory,
     findings: allFindings,
     errors: allErrors,
+    accountSpend,
   };
 
   console.log('\n📊 Summary');
@@ -167,6 +200,11 @@ async function main() {
   console.log(
     `   Est. savings: $${report.totalEstimatedMonthlySavings}/mo  (~$${Math.round(report.totalEstimatedMonthlySavings * 12)}/yr)`,
   );
+  if (report.accountSpend && report.accountSpend.total > 0) {
+    console.log(
+      `   Bill (30d):   $${report.accountSpend.total.toLocaleString('en-US')}  →  waste = ${report.accountSpend.wastePctOfBill}% of bill`,
+    );
+  }
   if (report.errors.length) {
     console.log(`   ⚠ Errors: ${report.errors.length}`);
   }

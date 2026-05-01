@@ -15,6 +15,21 @@ const SAMPLE: ScanReport = {
   accountId: '123456789012',
   regions: ['us-east-1', 'us-west-2'],
   totalEstimatedMonthlySavings: 2513,
+  accountSpend: {
+    periodStart: '2026-03-30',
+    periodEnd: '2026-04-30',
+    total: 8400,
+    byService: {
+      'Amazon Elastic Compute Cloud - Compute': 3780,
+      'Amazon Relational Database Service': 2520,
+      'Amazon Simple Storage Service': 840,
+      'Amazon CloudFront': 420,
+      'AWS Lambda': 252,
+      'AmazonCloudWatch': 168,
+      Other: 420,
+    },
+    wastePctOfBill: 30,
+  },
   findingsByCategory: {
     EBS: 2,
     RDS: 1,
