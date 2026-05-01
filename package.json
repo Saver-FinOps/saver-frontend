@@ -8,11 +8,13 @@
     "start": "next start",
     "lint": "eslint",
     "scan": "tsx scripts/scan/run.ts",
-    "scan:preview": "tsx scripts/scan/preview-report.ts"
+    "scan:preview": "tsx scripts/scan/preview-report.ts",
+    "lead:onboard": "tsx scripts/lead/onboard.ts"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch": "^3.1039.0",
     "@aws-sdk/client-cloudwatch-logs": "^3.1039.0",
+    "@aws-sdk/client-cost-explorer": "^3.1039.0",
     "@aws-sdk/client-ec2": "^3.1039.0",
     "@aws-sdk/client-rds": "^3.1039.0",
     "@aws-sdk/client-sts": "^3.1038.0",

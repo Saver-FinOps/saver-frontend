@@ -38,7 +38,11 @@ const T = {
     metaRegions: 'Regions',
     bigStat: 'RECOVERABLE / MONTH',
     annualized: 'over a year',
+    pctLabel: 'of your last-30-day bill',
+    spendLabel: 'You spent',
+    spendPeriod: 'over the last 30 days',
     breakdownTitle: 'By category',
+    spendBreakdownTitle: 'Top 3 services in your bill',
     findingsTitle: 'What we found',
     colService: 'Service',
     colResource: 'Resource',
@@ -75,7 +79,11 @@ const T = {
     metaRegions: 'Regiones',
     bigStat: 'RECUPERABLE / MES',
     annualized: 'al año',
+    pctLabel: 'de tu factura últimos 30 días',
+    spendLabel: 'Gastaste',
+    spendPeriod: 'en los últimos 30 días',
     breakdownTitle: 'Por categoría',
+    spendBreakdownTitle: 'Top 3 servicios en tu factura',
     findingsTitle: 'Qué encontramos',
     colService: 'Servicio',
     colResource: 'Recurso',
@@ -161,6 +169,56 @@ function renderCategoryPill(
   `;
 }
 
+function renderSpendOverviewBlock(
+  spend: NonNullable<ScanReport['accountSpend']>,
+  t: (typeof T)[keyof typeof T],
+): string {
+  const totalFmt = spend.total.toLocaleString('en-US', {
+    maximumFractionDigits: 0,
+  });
+
+  // Top 3 services by spend
+  const topServices = Object.entries(spend.byService)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+
+  const totalForPct = spend.total > 0 ? spend.total : 1;
+  const rows = topServices
+    .map(([name, cost]) => {
+      const pct = Math.round((cost / totalForPct) * 100);
+      const costFmt = cost.toLocaleString('en-US', { maximumFractionDigits: 0 });
+      const barWidth = Math.max(pct, 2);
+      return `
+      <tr>
+        <td style="padding:8px 12px 8px 0;font-size:13px;color:#0f172a;font-weight:500;width:50%;">${escapeHtml(name)}</td>
+        <td style="padding:8px 0;width:50%;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td style="width:100%;padding-right:10px;">
+              <div style="height:6px;background:#f1f5f9;border-radius:3px;">
+                <div style="height:6px;background:#3b82f6;border-radius:3px;width:${barWidth}%;"></div>
+              </div>
+            </td>
+            <td style="white-space:nowrap;font-size:12px;color:#475569;font-variant-numeric:tabular-nums;text-align:right;">$${costFmt} · ${pct}%</td>
+          </tr></table>
+        </td>
+      </tr>`;
+    })
+    .join('');
+
+  return `
+      <!-- Spend overview -->
+      <tr><td style="padding:24px 40px;background:#f8fafc;border-bottom:1px solid #f1f5f9;">
+        <div style="font-size:13px;color:#475569;margin-bottom:14px;">
+          <strong style="color:#0f172a;">${escapeHtml(t.spendLabel)} $${totalFmt}</strong> ${escapeHtml(t.spendPeriod)}.
+        </div>
+        <div style="font-family:ui-monospace,monospace;font-size:10px;letter-spacing:0.1em;font-weight:700;color:#94a3b8;margin-bottom:6px;">${t.spendBreakdownTitle.toUpperCase()}</div>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          ${rows}
+        </table>
+      </td></tr>
+      `;
+}
+
 export function renderReportHtml(args: RenderArgs): string {
   const { report } = args;
   const t = T[args.lang];
@@ -228,15 +286,38 @@ export function renderReportHtml(args: RenderArgs): string {
       </td></tr>
       `
           : `
-      <!-- Big number -->
+      <!-- Big number + % of bill -->
       <tr><td style="padding:32px 40px;background:#ffffff;border-bottom:1px solid #f1f5f9;">
-        <div style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.12em;font-weight:700;color:#64748b;margin-bottom:8px;">${t.bigStat}</div>
-        <div style="font-size:44px;font-weight:800;color:#15803d;letter-spacing:-0.025em;line-height:1;font-variant-numeric:tabular-nums;">$${total}<span style="font-size:18px;color:#475569;font-weight:500;letter-spacing:0;"> /mo</span></div>
-        <div style="font-size:13px;color:#64748b;margin-top:6px;font-variant-numeric:tabular-nums;">≈ $${annualized} ${t.annualized}</div>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="vertical-align:top;">
+              <div style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.12em;font-weight:700;color:#64748b;margin-bottom:8px;">${t.bigStat}</div>
+              <div style="font-size:44px;font-weight:800;color:#15803d;letter-spacing:-0.025em;line-height:1;font-variant-numeric:tabular-nums;">$${total}<span style="font-size:18px;color:#475569;font-weight:500;letter-spacing:0;"> /mo</span></div>
+              <div style="font-size:13px;color:#64748b;margin-top:6px;font-variant-numeric:tabular-nums;">≈ $${annualized} ${t.annualized}</div>
+            </td>
+            ${
+              report.accountSpend && report.accountSpend.total > 0
+                ? `
+            <td style="vertical-align:top;text-align:right;width:140px;padding-left:20px;">
+              <div style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.12em;font-weight:700;color:#64748b;margin-bottom:8px;">%</div>
+              <div style="font-size:44px;font-weight:800;color:#0f172a;letter-spacing:-0.025em;line-height:1;font-variant-numeric:tabular-nums;">${report.accountSpend.wastePctOfBill}<span style="font-size:24px;color:#475569;">%</span></div>
+              <div style="font-size:13px;color:#64748b;margin-top:6px;line-height:1.4;">${escapeHtml(t.pctLabel)}</div>
+            </td>
+            `
+                : ''
+            }
+          </tr>
+        </table>
 
-        <div style="margin-top:20px;font-family:ui-monospace,monospace;font-size:10px;letter-spacing:0.1em;font-weight:700;color:#94a3b8;margin-bottom:10px;">${t.breakdownTitle.toUpperCase()}</div>
+        <div style="margin-top:24px;font-family:ui-monospace,monospace;font-size:10px;letter-spacing:0.1em;font-weight:700;color:#94a3b8;margin-bottom:10px;">${t.breakdownTitle.toUpperCase()}</div>
         <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>${categoryPills}</tr></table>
       </td></tr>
+
+      ${
+        report.accountSpend && report.accountSpend.total > 0
+          ? renderSpendOverviewBlock(report.accountSpend, t)
+          : ''
+      }
 
       <!-- Findings table -->
       <tr><td style="padding:32px 40px 8px;background:#ffffff;">
