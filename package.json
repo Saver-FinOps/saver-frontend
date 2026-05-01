@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "scan": "tsx scripts/scan/run.ts",
-    "scan:preview": "tsx scripts/scan/preview-report.ts"
+    "scan:preview": "tsx scripts/scan/preview-report.ts",
+    "lead:onboard": "tsx scripts/lead/onboard.ts"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch": "^3.1039.0",

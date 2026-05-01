@@ -60,3 +60,6 @@ next-env.d.ts
 /preview.html
 *.scan.html
 *.scan.json
+
+# lead tracking (contains emails, External IDs — never commit)
+/data/leads/
