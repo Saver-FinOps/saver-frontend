@@ -1,7 +1,7 @@
 # Concierge runbook — qué hacer cuando llega un scan request
 
 Este doc es solo para vos (Iván). Cada vez que recibís un email
-`[Signal] 🔥 SCAN REQUEST: ...` en `dujautivan@gmail.com`, seguí estos pasos.
+`[Signal] 🔥 SCAN REQUEST: ...` en `signalfinops@gmail.com`, seguí estos pasos.
 
 ---
 

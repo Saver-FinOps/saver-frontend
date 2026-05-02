@@ -4,7 +4,7 @@
 
 **Para:** `{{LEAD_EMAIL}}`
 
-**Reply-To:** `dujautivan@gmail.com`
+**Reply-To:** `signalfinops@gmail.com`
 
 ---
 

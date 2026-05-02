@@ -1,7 +1,7 @@
-// Pre-launch: all channels route to founder Gmail. When a real domain
-// is verified in Resend, swap to per-channel addresses on that domain
+// Pre-launch: all channels route to the institutional Gmail. When a real
+// domain is verified in Resend, swap to per-channel addresses on that domain
 // (e.g. hello@signal.dev) and update CONTACT_EMAILS below.
-const FOUNDER_EMAIL = 'dujautivan@gmail.com';
+const FOUNDER_EMAIL = 'signalfinops@gmail.com';
 
 export const CONTACT_EMAILS = {
   hello: FOUNDER_EMAIL,
