@@ -362,7 +362,7 @@ export function renderReportHtml(args: RenderArgs): string {
       <tr><td style="padding:0 40px 32px;background:#ffffff;text-align:left;">
         <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
           <td style="background:#0f172a;border-radius:999px;">
-            <a href="mailto:dujautivan@gmail.com?subject=${encodeURIComponent('Re: ' + (customerName ? customerName + ' — Signal scan' : 'Signal scan'))}&body=${encodeURIComponent('Hi Iván,\n\nMy priorities from the report:\n\n1. \n2. \n3. \n\nThanks,\n')}" style="display:inline-block;padding:12px 22px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;letter-spacing:-0.01em;">${escapeHtml(t.ctaLabel)} →</a>
+            <a href="mailto:signalfinops@gmail.com?subject=${encodeURIComponent('Re: ' + (customerName ? customerName + ' — Signal scan' : 'Signal scan'))}&body=${encodeURIComponent('Hi Iván,\n\nMy priorities from the report:\n\n1. \n2. \n3. \n\nThanks,\n')}" style="display:inline-block;padding:12px 22px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;letter-spacing:-0.01em;">${escapeHtml(t.ctaLabel)} →</a>
           </td>
         </tr></table>
       </td></tr>
