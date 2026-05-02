@@ -26,7 +26,7 @@ export function Container({
   className?: string;
 }) {
   return (
-    <div className={`max-w-(--max-width,1200px) mx-auto px-(--gutter-md,32px) ${className ?? ''}`}>
+    <div className={`max-w-(--max-width,1200px) mx-auto px-5 sm:px-6 lg:px-8 ${className ?? ''}`}>
       {children}
     </div>
   );

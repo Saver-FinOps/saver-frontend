@@ -47,7 +47,7 @@ function FloatingShards({ perMonth }: { perMonth: string }) {
       {/* ec2 shard — top-right of dashboard */}
       <div
         aria-hidden
-        className="absolute -top-10 -right-14 z-10 w-[200px] bg-white rounded-[14px] border border-slate-200 p-3 pointer-events-none"
+        className="hidden lg:block absolute -top-10 -right-14 z-10 w-[200px] bg-white rounded-[14px] border border-slate-200 p-3 pointer-events-none"
         style={{
           boxShadow: "0 18px 40px -12px rgb(16 24 40 / 0.18)",
           transform: "rotate(4deg)",
@@ -65,7 +65,7 @@ function FloatingShards({ perMonth }: { perMonth: string }) {
       {/* rds shard — bottom-left of dashboard */}
       <div
         aria-hidden
-        className="absolute -bottom-8 -left-16 z-10 w-[190px] bg-white rounded-[14px] border border-slate-200 p-3 pointer-events-none"
+        className="hidden lg:block absolute -bottom-8 -left-16 z-10 w-[190px] bg-white rounded-[14px] border border-slate-200 p-3 pointer-events-none"
         style={{
           boxShadow: "0 18px 40px -12px rgb(16 24 40 / 0.15)",
           transform: "rotate(-5deg)",
@@ -674,7 +674,7 @@ function HeroInner({ lang, t, onOpenSample = openSampleModal }: HeroProps) {
 
   return (
     <section
-      className="relative pt-12 pb-[120px] overflow-hidden"
+      className="relative pt-8 pb-16 lg:pt-12 lg:pb-[120px] overflow-hidden"
       style={
         {
           background:
@@ -688,11 +688,11 @@ function HeroInner({ lang, t, onOpenSample = openSampleModal }: HeroProps) {
 
       <Container className="relative">
         <div
-          className="grid items-center"
-          style={{
-            gridTemplateColumns: formPosition === "below" ? "1fr" : "1.05fr 0.95fr",
-            gap: formPosition === "below" ? 40 : 56,
-          }}
+          className={`grid items-center gap-10 ${
+            formPosition === "below"
+              ? ""
+              : "lg:grid-cols-[1.05fr_0.95fr] lg:gap-14"
+          }`}
         >
           {/* Left column — copy + form */}
           <div>
@@ -737,7 +737,7 @@ function HeroInner({ lang, t, onOpenSample = openSampleModal }: HeroProps) {
 
         {/* Below-fold layout */}
         {formPosition === "below" && (
-          <div className="mt-16 grid grid-cols-[1.1fr_0.9fr] gap-12 items-start">
+          <div className="mt-10 lg:mt-16 grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-12 items-start">
             <HeroForm lang={lang} t={t} onOpenSample={onOpenSample} big />
             {useCounter ? (
               <HeroWasteCounter t={t} compact />

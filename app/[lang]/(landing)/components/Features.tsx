@@ -51,7 +51,7 @@ export default function Features({ t }: { t: Dictionary['t'] }) {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {feats.map((f, i) => {
             const Icon = icons[f.icon];
             return (
