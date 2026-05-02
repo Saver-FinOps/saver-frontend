@@ -109,26 +109,26 @@ function NavInner({
           : '1px solid transparent',
       }}
     >
-      <Container className="h-[72px] flex items-center justify-between">
+      <Container className="h-[72px] flex items-center justify-between gap-3">
         <Logo />
-        <div className="flex items-center gap-7">
+        <div className="flex items-center gap-3 md:gap-7">
           <a
             href="#how"
-            className={navLinkCls}
+            className={`${navLinkCls} hidden md:inline`}
             onClick={() => track('nav_link_click', { link: 'how' })}
           >
             {t.nav_how}
           </a>
           <a
             href="#why"
-            className={navLinkCls}
+            className={`${navLinkCls} hidden md:inline`}
             onClick={() => track('nav_link_click', { link: 'why' })}
           >
             {t.nav_why}
           </a>
           <a
             href="#faq"
-            className={navLinkCls}
+            className={`${navLinkCls} hidden md:inline`}
             onClick={() => track('nav_link_click', { link: 'faq' })}
           >
             {t.nav_faq}
