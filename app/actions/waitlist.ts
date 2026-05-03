@@ -54,29 +54,40 @@ export async function joinWaitlist(
 
   let duplicate = false;
   try {
-    const { error: contactError } = await resend.contacts.create({
+    // Pre-check: Resend's contacts.create is idempotent (returns success on
+    // re-create), so we explicitly look up the email in the audience first.
+    const { data: existing } = await resend.contacts.get({
       email,
       audienceId: RESEND_AUDIENCE_ID,
-      unsubscribed: false,
-      firstName: company,
-      properties: {
-        company,
-        role,
-        lang,
-        source: 'waitlist_form',
-      },
     });
-    if (contactError) {
-      const message = contactError.message.toLowerCase();
-      duplicate =
-        message.includes('already') || message.includes('duplicate');
-      if (!duplicate) {
-        console.error('[waitlist] audience.create failed', contactError);
-        return { ok: false, error: 'server' };
+
+    if (existing) {
+      duplicate = true;
+    } else {
+      const { error: createError } = await resend.contacts.create({
+        email,
+        audienceId: RESEND_AUDIENCE_ID,
+        unsubscribed: false,
+        firstName: company,
+        properties: {
+          company,
+          role,
+          lang,
+          source: 'waitlist_form',
+        },
+      });
+      if (createError) {
+        const message = createError.message.toLowerCase();
+        if (message.includes('already') || message.includes('duplicate')) {
+          duplicate = true;
+        } else {
+          console.error('[waitlist] audience.create failed', createError);
+          return { ok: false, error: 'server' };
+        }
       }
     }
   } catch (err) {
-    console.error('[waitlist] audience.create threw', err);
+    console.error('[waitlist] contact handling threw', err);
     return { ok: false, error: 'server' };
   }
 
