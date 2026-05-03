@@ -60,32 +60,43 @@ export async function submitScanRequest(
 
   let duplicate = false;
   try {
-    const { error: contactError } = await resend.contacts.create({
+    // Pre-check: Resend's contacts.create is idempotent (returns success on
+    // re-create), so we explicitly look up the email in the audience first.
+    const { data: existing } = await resend.contacts.get({
       email,
       audienceId: RESEND_AUDIENCE_ID,
-      unsubscribed: false,
-      firstName: company,
-      properties: {
-        company,
-        role,
-        lang,
-        spend,
-        intent: 'scan_request',
-        source: 'scan_form',
-        notes: notes ?? '',
-      },
     });
-    if (contactError) {
-      const message = contactError.message.toLowerCase();
-      duplicate =
-        message.includes('already') || message.includes('duplicate');
-      if (!duplicate) {
-        console.error('[scan-request] audience.create failed', contactError);
-        return { ok: false, error: 'server' };
+
+    if (existing) {
+      duplicate = true;
+    } else {
+      const { error: createError } = await resend.contacts.create({
+        email,
+        audienceId: RESEND_AUDIENCE_ID,
+        unsubscribed: false,
+        firstName: company,
+        properties: {
+          company,
+          role,
+          lang,
+          spend,
+          intent: 'scan_request',
+          source: 'scan_form',
+          notes: notes ?? '',
+        },
+      });
+      if (createError) {
+        const message = createError.message.toLowerCase();
+        if (message.includes('already') || message.includes('duplicate')) {
+          duplicate = true;
+        } else {
+          console.error('[scan-request] audience.create failed', createError);
+          return { ok: false, error: 'server' };
+        }
       }
     }
   } catch (err) {
-    console.error('[scan-request] audience.create threw', err);
+    console.error('[scan-request] contact handling threw', err);
     return { ok: false, error: 'server' };
   }
 
