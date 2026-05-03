@@ -60,7 +60,7 @@ export async function submitScanRequest(
 
   let duplicate = false;
   try {
-    await resend.contacts.create({
+    const { error: contactError } = await resend.contacts.create({
       email,
       audienceId: RESEND_AUDIENCE_ID,
       unsubscribed: false,
@@ -75,14 +75,18 @@ export async function submitScanRequest(
         notes: notes ?? '',
       },
     });
-  } catch (err) {
-    const message = err instanceof Error ? err.message.toLowerCase() : '';
-    duplicate =
-      message.includes('already exists') || message.includes('duplicate');
-    if (!duplicate) {
-      console.error('[scan-request] audience.create failed', err);
-      return { ok: false, error: 'server' };
+    if (contactError) {
+      const message = contactError.message.toLowerCase();
+      duplicate =
+        message.includes('already') || message.includes('duplicate');
+      if (!duplicate) {
+        console.error('[scan-request] audience.create failed', contactError);
+        return { ok: false, error: 'server' };
+      }
     }
+  } catch (err) {
+    console.error('[scan-request] audience.create threw', err);
+    return { ok: false, error: 'server' };
   }
 
   if (duplicate) {
@@ -110,7 +114,7 @@ export async function submitScanRequest(
     : userMail.subject;
 
   try {
-    await Promise.all([
+    const sends = await Promise.all([
       resend.emails.send({
         from: EMAIL_FROM,
         to: userTo,
@@ -127,8 +131,13 @@ export async function submitScanRequest(
         text: alert.text,
       }),
     ]);
+    const sendErrors = sends.map((s) => s.error).filter(Boolean);
+    if (sendErrors.length > 0) {
+      console.error('[scan-request] email send returned error', sendErrors);
+      return { ok: false, error: 'server' };
+    }
   } catch (err) {
-    console.error('[scan-request] email send failed', err);
+    console.error('[scan-request] email send threw', err);
     return { ok: false, error: 'server' };
   }
 
