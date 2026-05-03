@@ -39,7 +39,7 @@ Adjunto: `signal-readonly-role.yaml` (template CloudFormation). También está e
 
 ## Qué hace esto
 
-Rol IAM solo lectura. Podemos ver metadata de recursos + Cost Explorer. **No** podemos escribir, borrar, ni leer contenido de S3, bases o secrets. Policy completa: <https://saver-frontend.vercel.app/es/security>.
+Rol IAM solo lectura. Podemos ver metadata de recursos + Cost Explorer. **No** podemos escribir, borrar, ni leer contenido de S3, bases o secrets. Policy completa: <https://signalfinops.com/es/security>.
 
 Podés borrar el stack en cualquier momento para revocarnos en 10 segundos.
 

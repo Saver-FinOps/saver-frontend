@@ -54,7 +54,7 @@ export async function joinWaitlist(
 
   let duplicate = false;
   try {
-    await resend.contacts.create({
+    const { error: contactError } = await resend.contacts.create({
       email,
       audienceId: RESEND_AUDIENCE_ID,
       unsubscribed: false,
@@ -66,14 +66,18 @@ export async function joinWaitlist(
         source: 'waitlist_form',
       },
     });
-  } catch (err) {
-    const message = err instanceof Error ? err.message.toLowerCase() : '';
-    duplicate =
-      message.includes('already exists') || message.includes('duplicate');
-    if (!duplicate) {
-      console.error('[waitlist] audience.create failed', err);
-      return { ok: false, error: 'server' };
+    if (contactError) {
+      const message = contactError.message.toLowerCase();
+      duplicate =
+        message.includes('already') || message.includes('duplicate');
+      if (!duplicate) {
+        console.error('[waitlist] audience.create failed', contactError);
+        return { ok: false, error: 'server' };
+      }
     }
+  } catch (err) {
+    console.error('[waitlist] audience.create threw', err);
+    return { ok: false, error: 'server' };
   }
 
   // Don't re-send welcome to existing contacts — just acknowledge.
@@ -94,7 +98,7 @@ export async function joinWaitlist(
     : welcome.subject;
 
   try {
-    await Promise.all([
+    const sends = await Promise.all([
       resend.emails.send({
         from: EMAIL_FROM,
         to: welcomeTo,
@@ -111,8 +115,13 @@ export async function joinWaitlist(
         text: alert.text,
       }),
     ]);
+    const sendErrors = sends.map((s) => s.error).filter(Boolean);
+    if (sendErrors.length > 0) {
+      console.error('[waitlist] email send returned error', sendErrors);
+      return { ok: false, error: 'server' };
+    }
   } catch (err) {
-    console.error('[waitlist] email send failed', err);
+    console.error('[waitlist] email send threw', err);
     return { ok: false, error: 'server' };
   }
 

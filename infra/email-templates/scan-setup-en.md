@@ -39,7 +39,7 @@ Attached: `signal-readonly-role.yaml` (CloudFormation template). Or grab it from
 
 ## What this does
 
-Read-only IAM role. We can see resource metadata + Cost Explorer. We **cannot** write, delete, or read S3 contents / database data / secrets. Full policy: <https://saver-frontend.vercel.app/en/security>.
+Read-only IAM role. We can see resource metadata + Cost Explorer. We **cannot** write, delete, or read S3 contents / database data / secrets. Full policy: <https://signalfinops.com/en/security>.
 
 You can delete the stack any time to revoke us in 10 seconds.
 

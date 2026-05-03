@@ -14,7 +14,7 @@ You give Signal a **read-only** view of your AWS account so we can scan for cost
 - We read **Cost Explorer** to correlate each resource with its monthly cost.
 - We **cannot** write, delete, or modify anything. We **cannot** read S3 contents, database data, or secrets.
 
-Full IAM policy is published at [signal/security](https://saver-frontend.vercel.app/es/security#permisos).
+Full IAM policy is published at [signal/security](https://signalfinops.com/es/security#permisos).
 
 You can revoke us in 10 seconds by deleting the CloudFormation stack.
 
