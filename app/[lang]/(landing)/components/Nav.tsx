@@ -45,7 +45,11 @@ function LangToggle({ lang }: { lang: string }) {
               if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
               track('lang_switch', { from: lang, to: k });
               e.preventDefault();
-              router.push(href);
+              // Preserve current section (hash) and don't scroll to top.
+              // Soft navigation via router.push keeps the same React tree;
+              // only the [lang] segment re-renders with the new dictionary.
+              const hash = window.location.hash;
+              router.push(href + hash, { scroll: false });
             }}
             className={`no-underline px-2.5 py-1 rounded-full font-body font-semibold text-xs uppercase tracking-[0.05em] transition-all duration-200 ${
               isActive

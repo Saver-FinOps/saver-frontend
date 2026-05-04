@@ -6,7 +6,7 @@ const en = {
   nav_cta: 'Join waitlist',
 
   // Hero variant A (dashboard-first)
-  heroA_badge: 'Early access · First 100 scans free',
+  heroA_badge: 'First 100 scans · free',
   heroA_h1_line1: 'Stop paying for',
   heroA_h1_line2: 'the AWS services you',
   heroA_h1_highlight: 'forgot about.',
