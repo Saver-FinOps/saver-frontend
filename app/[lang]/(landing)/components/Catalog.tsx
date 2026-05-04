@@ -1,4 +1,5 @@
 import { Container } from './ui';
+import { Reveal } from '../../_components/Reveal';
 import type { Dictionary } from '../../dictionaries';
 
 const AWS_BADGE_COLOR: Record<string, string> = {
@@ -17,16 +18,17 @@ export default function Catalog({ t }: { t: Dictionary['t'] }) {
     <section className="pt-[112px] pb-[96px] bg-white relative">
       <Container>
         {/* Header */}
-        <div className="text-center max-w-[760px] mx-auto mb-12">
+        <Reveal className="text-center max-w-[760px] mx-auto mb-12">
           <div className="eyebrow mb-3.5">{t.catalog_eyebrow}</div>
           <h2 className="section-heading mb-[18px]">{t.catalog_h2}</h2>
           <p className="text-lg text-slate-600 leading-[1.55] m-0">
             {t.catalog_sub}
           </p>
-        </div>
+        </Reveal>
 
         {/* Table */}
-        <div className="max-w-[920px] mx-auto rounded-2xl border border-slate-200 overflow-hidden bg-white">
+        <Reveal className="max-w-[920px] mx-auto" delay={120}>
+        <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white">
           {/* Column headers — desktop only */}
           <div className="hidden md:grid grid-cols-[110px_1fr_1.2fr_140px] gap-4 px-6 py-3.5 bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-500">
             <div>AWS</div>
@@ -119,6 +121,7 @@ export default function Catalog({ t }: { t: Dictionary['t'] }) {
             );
           })}
         </div>
+        </Reveal>
 
         {/* Footnote */}
         <div className="text-center text-xs text-slate-500 font-mono mt-5">

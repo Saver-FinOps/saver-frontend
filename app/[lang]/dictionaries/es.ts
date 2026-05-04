@@ -6,7 +6,7 @@ const es = {
   nav_cta: 'Unirme al waitlist',
 
   // Hero variant A (dashboard-first)
-  heroA_badge: 'Acceso anticipado · Primeros 100 escaneos gratis',
+  heroA_badge: 'Primeros 100 escaneos · gratis',
   heroA_h1_line1: 'Dejá de pagar por',
   heroA_h1_line2: 'los servicios de AWS que',
   heroA_h1_highlight: 'olvidaste.',
@@ -246,7 +246,7 @@ const es = {
 
   // Hero — dashboard mock
   hero_dash_potential: 'Ahorro potencial',
-  hero_dash_of_bill: 'de la factura',
+  hero_dash_of_bill: 'del total',
   hero_dash_item_ebs: 'Volúmenes EBS ociosos',
   hero_dash_item_rds: 'RDS sobredimensionada',
   hero_dash_item_nat: 'NAT gateways olvidados',

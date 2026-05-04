@@ -3,6 +3,7 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Badge, Button, Container, Grain } from './ui';
+import { Reveal } from '../../_components/Reveal';
 import { defaultTweakState } from './tweaks-config';
 import type { TweakState } from './tweaks-config';
 import type { Dictionary } from '../../dictionaries';
@@ -59,8 +60,9 @@ function FinalCTAInner({
   return (
     <section id="waitlist" className="py-24">
       <Container>
+        <Reveal>
         <div
-          className="rounded-[28px] px-14 py-20 relative overflow-hidden text-white"
+          className="rounded-[28px] px-6 py-12 sm:px-10 sm:py-16 md:px-14 md:py-20 relative overflow-hidden text-white"
           style={{
             background:
               'linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #1e3a8a 100%)',
@@ -115,20 +117,27 @@ function FinalCTAInner({
               {t.fcta_sub}
             </p>
 
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex flex-col sm:flex-row gap-3 sm:flex-wrap">
               <Button
                 variant="primary"
                 size="lg"
                 onClick={onJoinClick}
+                className="w-full sm:w-auto"
               >
                 {t.fcta_primary}
               </Button>
-              <Button variant="white" size="lg" onClick={onSampleClick}>
+              <Button
+                variant="white"
+                size="lg"
+                onClick={onSampleClick}
+                className="w-full sm:w-auto"
+              >
                 {t.fcta_secondary}
               </Button>
             </div>
           </div>
         </div>
+        </Reveal>
       </Container>
     </section>
   );

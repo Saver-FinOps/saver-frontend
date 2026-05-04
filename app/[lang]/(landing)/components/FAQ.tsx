@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Container } from './ui';
+import { Reveal } from '../../_components/Reveal';
 import type { Dictionary } from '../../dictionaries';
 import { track } from '@/app/lib/analytics';
 
@@ -18,16 +19,17 @@ export default function FAQ({
     <section id="faq" className="py-28 bg-white">
       <Container className="max-w-[820px]">
         {/* Header */}
-        <div className="text-center mb-12">
+        <Reveal className="text-center mb-12">
           <div className="eyebrow mb-3.5">
             {t.faq_eyebrow}
           </div>
           <h2 className="font-display text-[clamp(32px,3.6vw,42px)] leading-[1.15] tracking-tight font-semibold text-slate-900 m-0">
             {t.faq_h2}
           </h2>
-        </div>
+        </Reveal>
 
         {/* Accordion */}
+        <Reveal delay={120}>
         <div className="flex flex-col gap-2.5">
           {items.map((it, i) => {
             const isOpen = open === i;
@@ -65,6 +67,7 @@ export default function FAQ({
             );
           })}
         </div>
+        </Reveal>
       </Container>
     </section>
   );

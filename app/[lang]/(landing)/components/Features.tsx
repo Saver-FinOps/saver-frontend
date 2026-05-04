@@ -1,5 +1,6 @@
 import { ShieldCheck, Zap, MousePointerClick } from 'lucide-react';
 import { Card, Container } from './ui';
+import { Reveal } from '../../_components/Reveal';
 import type { Dictionary } from '../../dictionaries';
 
 const icons = {
@@ -37,7 +38,7 @@ export default function Features({ t }: { t: Dictionary['t'] }) {
     >
       <Container>
         {/* Header */}
-        <div className="text-center max-w-[760px] mx-auto mb-16">
+        <Reveal className="text-center max-w-[760px] mx-auto mb-16">
           <div className="eyebrow mb-3.5">
             {t.feat_eyebrow}
           </div>
@@ -48,14 +49,15 @@ export default function Features({ t }: { t: Dictionary['t'] }) {
           <p className="text-lg text-slate-600 leading-[1.55] m-0">
             {t.feat_sub}
           </p>
-        </div>
+        </Reveal>
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {feats.map((f, i) => {
             const Icon = icons[f.icon];
             return (
-              <Card key={i} className="p-8">
+              <Reveal key={i} delay={i * 90}>
+              <Card className="card-lift p-8 h-full">
                 <div
                   className="w-[52px] h-[52px] rounded-[14px] relative grid place-items-center mb-5"
                   style={{
@@ -73,6 +75,7 @@ export default function Features({ t }: { t: Dictionary['t'] }) {
                   {f.body}
                 </div>
               </Card>
+              </Reveal>
             );
           })}
         </div>
