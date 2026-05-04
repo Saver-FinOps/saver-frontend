@@ -60,14 +60,14 @@ export default function SampleModal({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-100 bg-[rgba(15,23,42,0.7)] backdrop-blur-sm grid place-items-center p-6 animate-[fadeInUp_.25s_ease]"
+      className="fixed inset-0 z-100 bg-[rgba(15,23,42,0.7)] backdrop-blur-sm grid place-items-center p-3 sm:p-6 animate-[fadeInUp_.25s_ease]"
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-[min(920px,100%)] max-h-[92vh] overflow-auto bg-white rounded-[20px] shadow-modal"
       >
         {/* Header */}
-        <div className="p-[22px_28px] border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-2">
+        <div className="p-5 md:p-[22px_28px] border-b border-slate-200 flex items-center justify-between gap-3 sticky top-0 bg-white z-2">
           <div>
             <div className="font-display text-[22px] font-semibold text-slate-900 tracking-tight">
               {t.modal_title}
@@ -86,12 +86,12 @@ export default function SampleModal({
         </div>
 
         {/* Body */}
-        <div className="p-7">
+        <div className="p-5 md:p-7">
           {/* Summary cards */}
-          <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-4 mb-7">
+          <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr] gap-3 md:gap-4 mb-6 md:mb-7">
             {/* Total savings */}
             <div
-              className="p-[22px] rounded-2xl border border-green-300"
+              className="p-5 md:p-[22px] rounded-2xl border border-green-300"
               style={{
                 background:
                   'linear-gradient(135deg, #ecfdf5, #d1fae5)',
@@ -100,9 +100,9 @@ export default function SampleModal({
               <div className="text-[11px] text-green-700 font-bold uppercase tracking-[0.08em] mb-1.5">
                 {t.modal_totals}
               </div>
-              <div className="font-display text-[42px] font-semibold text-green-700 tracking-[-0.03em] leading-none">
+              <div className="font-display text-[32px] md:text-[42px] font-semibold text-green-700 tracking-[-0.03em] leading-none">
                 ${total.toLocaleString()}
-                <span className="text-lg font-medium text-green-800">
+                <span className="text-base md:text-lg font-medium text-green-800">
                   {t.per_month_suffix}
                 </span>
               </div>
@@ -112,13 +112,13 @@ export default function SampleModal({
             </div>
 
             {/* % of bill */}
-            <div className="p-[22px] rounded-2xl bg-slate-50 border border-slate-200">
+            <div className="p-5 md:p-[22px] rounded-2xl bg-slate-50 border border-slate-200">
               <div className="text-[11px] text-slate-500 font-bold uppercase tracking-[0.08em] mb-1.5">
                 {t.modal_of_bill}
               </div>
-              <div className="font-display text-[42px] font-semibold text-slate-900 tracking-[-0.03em] leading-none">
+              <div className="font-display text-[32px] md:text-[42px] font-semibold text-slate-900 tracking-[-0.03em] leading-none">
                 {t.modal_of_bill_pct}
-                <span className="text-2xl text-slate-600">
+                <span className="text-xl md:text-2xl text-slate-600">
                   %
                 </span>
               </div>
@@ -128,11 +128,11 @@ export default function SampleModal({
             </div>
 
             {/* Effort */}
-            <div className="p-[22px] rounded-2xl bg-slate-50 border border-slate-200">
+            <div className="p-5 md:p-[22px] rounded-2xl bg-slate-50 border border-slate-200">
               <div className="text-[11px] text-slate-500 font-bold uppercase tracking-[0.08em] mb-1.5">
                 {t.modal_effort}
               </div>
-              <div className="font-display text-[42px] font-semibold text-slate-900 tracking-[-0.03em] leading-none">
+              <div className="font-display text-[32px] md:text-[42px] font-semibold text-slate-900 tracking-[-0.03em] leading-none">
                 {t.modal_effort_value}
               </div>
               <div className="text-xs text-slate-500 mt-1.5">
@@ -143,8 +143,8 @@ export default function SampleModal({
 
           {/* Findings table */}
           <div className="border border-slate-200 rounded-[14px] overflow-hidden">
-            {/* Column headers */}
-            <div className="px-5 py-3 bg-slate-50 border-b border-slate-200 grid grid-cols-[70px_1.2fr_1.5fr_100px_1fr] gap-3 text-[11px] font-bold text-slate-500 uppercase tracking-[0.08em]">
+            {/* Column headers — desktop only */}
+            <div className="hidden md:grid px-5 py-3 bg-slate-50 border-b border-slate-200 grid-cols-[70px_1.2fr_1.5fr_100px_1fr] gap-3 text-[11px] font-bold text-slate-500 uppercase tracking-[0.08em]">
               <div>{t.modal_col_aws}</div>
               <div>{t.modal_col_resource}</div>
               <div>{t.modal_col_finding}</div>
@@ -153,47 +153,74 @@ export default function SampleModal({
             </div>
 
             {/* Rows */}
-            {findings.map((f, i) => (
-              <div
-                key={i}
-                className={`px-5 py-4 grid grid-cols-[70px_1.2fr_1.5fr_100px_1fr] gap-3 items-center ${
-                  i < findings.length - 1
-                    ? 'border-b border-slate-100'
-                    : ''
-                }`}
-              >
+            {findings.map((f, i) => {
+              const isLast = i === findings.length - 1;
+              const catEl = (
+                <span className="bg-slate-100 px-2 py-[2px] rounded-md text-[11px] font-bold text-slate-600 font-mono">
+                  {f.cat}
+                </span>
+              );
+              const resEl = (
                 <div>
-                  <span className="bg-slate-100 px-2 py-[2px] rounded-md text-[11px] font-bold text-slate-600 font-mono">
-                    {f.cat}
-                  </span>
-                </div>
-                <div>
-                  <div className="text-sm font-semibold text-slate-900 font-mono">
+                  <div className="text-sm font-semibold text-slate-900 font-mono break-all">
                     {f.res}
                   </div>
                   <div className="text-[11px] text-slate-500 font-mono mt-0.5">
                     {f.context}
                   </div>
                 </div>
-                <div className="text-[13px] text-slate-600">
-                  {f.detail}
-                </div>
-                <div>
-                  <span
-                    className="text-[11px] font-bold px-2 py-[3px] rounded-full"
-                    style={{
-                      color: effortColor[f.effort],
-                      background: `${effortColor[f.effort]}15`,
-                    }}
-                  >
-                    {t.modal_effort_labels[f.effort]}
-                  </span>
-                </div>
-                <div className="text-right font-display text-xl font-semibold text-green-700 tracking-tight">
+              );
+              const detailEl = (
+                <div className="text-[13px] text-slate-600">{f.detail}</div>
+              );
+              const effortEl = (
+                <span
+                  className="text-[11px] font-bold px-2 py-[3px] rounded-full whitespace-nowrap"
+                  style={{
+                    color: effortColor[f.effort],
+                    background: `${effortColor[f.effort]}15`,
+                  }}
+                >
+                  {t.modal_effort_labels[f.effort]}
+                </span>
+              );
+              const savingsEl = (
+                <div className="text-right font-display text-xl font-semibold text-green-700 tracking-tight whitespace-nowrap">
                   &minus;${f.save}
                 </div>
-              </div>
-            ))}
+              );
+
+              return (
+                <div
+                  key={i}
+                  className={`px-4 md:px-5 py-4 ${
+                    !isLast ? 'border-b border-slate-100' : ''
+                  }`}
+                >
+                  {/* Mobile layout — card stack */}
+                  <div className="md:hidden flex flex-col gap-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        {catEl}
+                        {effortEl}
+                      </div>
+                      {savingsEl}
+                    </div>
+                    {resEl}
+                    {detailEl}
+                  </div>
+
+                  {/* Desktop layout — 5-col grid */}
+                  <div className="hidden md:grid grid-cols-[70px_1.2fr_1.5fr_100px_1fr] gap-3 items-center">
+                    <div>{catEl}</div>
+                    {resEl}
+                    {detailEl}
+                    <div>{effortEl}</div>
+                    {savingsEl}
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* Actions */}

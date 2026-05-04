@@ -99,7 +99,7 @@ export function Button({
   return (
     <button
       {...props}
-      className={`inline-flex items-center justify-center gap-2 font-semibold font-body rounded-xl cursor-pointer transition-all duration-200 ${sizeCls} ${variantCls} ${fullWidth ? 'w-full' : ''} ${props.disabled ? 'opacity-65 cursor-not-allowed' : ''} ${className ?? ''}`}
+      className={`inline-flex items-center justify-center gap-2 font-semibold font-body rounded-xl cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 ${sizeCls} ${variantCls} ${fullWidth ? 'w-full' : ''} ${props.disabled ? 'opacity-65 cursor-not-allowed hover:translate-y-0' : ''} ${className ?? ''}`}
     >
       {children}
     </button>

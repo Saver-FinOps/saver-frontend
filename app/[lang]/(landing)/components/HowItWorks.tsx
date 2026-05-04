@@ -1,5 +1,6 @@
 import { Plug, Search, Trash2 } from 'lucide-react';
 import { Container } from './ui';
+import { Reveal } from '../../_components/Reveal';
 import type { Dictionary } from '../../dictionaries';
 
 export default function HowItWorks({ t }: { t: Dictionary['t'] }) {
@@ -35,10 +36,10 @@ export default function HowItWorks({ t }: { t: Dictionary['t'] }) {
     >
       <Container>
         {/* Header */}
-        <div className="text-center max-w-[760px] mx-auto mb-16">
+        <Reveal className="text-center max-w-[760px] mx-auto mb-16">
           <div className="eyebrow mb-3.5">{t.how_eyebrow}</div>
           <h2 className="section-heading mb-[18px]">{t.how_h2}</h2>
-        </div>
+        </Reveal>
 
         {/* Steps */}
         <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[1100px] mx-auto">
@@ -53,9 +54,9 @@ export default function HowItWorks({ t }: { t: Dictionary['t'] }) {
           />
 
           {steps.map((step, i) => (
+            <Reveal key={i} delay={i * 90}>
             <div
-              key={i}
-              className="relative bg-white rounded-2xl border border-slate-200 p-7 flex flex-col"
+              className="card-lift relative bg-white rounded-2xl border border-slate-200 p-7 flex flex-col h-full"
             >
               {/* Number + icon row */}
               <div className="flex items-center gap-3 mb-5">
@@ -88,6 +89,7 @@ export default function HowItWorks({ t }: { t: Dictionary['t'] }) {
                 {step.body}
               </div>
             </div>
+            </Reveal>
           ))}
         </div>
       </Container>
